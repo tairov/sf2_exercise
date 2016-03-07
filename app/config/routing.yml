@@ -2,3 +2,7 @@ yoda_event:
     resource: "@YodaEventBundle/Resources/config/routing.yml"
     prefix:   /
 
+user_controller:
+    resource: "@UserBundle/Controller"
+    prefix:   /
+    type:     annotation
