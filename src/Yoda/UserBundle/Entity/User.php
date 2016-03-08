@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
  * @ORM\Table("yoda_user")
  * @ORM\Entity(repositoryClass="Yoda\UserBundle\Entity\UserRepository")
  */
-class User implements AdvancedUserInterface
+class User implements AdvancedUserInterface, \Serializable
 {
     /**
      * @var integer
@@ -49,6 +49,13 @@ class User implements AdvancedUserInterface
      * @ORM\Column(name="password", type="string", length=255)
      */
     private $password;
+
+    /**
+     * just for temporal plain password container
+     *
+     * @var  string
+     */
+    private $plainPassword;
 
     /**
      * @var bool
@@ -131,7 +138,7 @@ class User implements AdvancedUserInterface
 
     public function eraseCredentials()
     {
-        //
+        $this->setPlainPassword(null);
     }
 
     /**
@@ -203,5 +210,50 @@ class User implements AdvancedUserInterface
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * String representation of object
+     * @link  http://php.net/manual/en/serializable.serialize.php
+     * @return string the string representation of the object or null
+     * @since 5.1.0
+     */
+    public function serialize()
+    {
+        return serialize(array(
+                             $this->id,
+                             $this->username,
+                             $this->password
+                         ));
+    }
+
+    /**
+     * Constructs the object
+     * @link  http://php.net/manual/en/serializable.unserialize.php
+     * @param string $serialized <p>
+     *                           The string representation of the object.
+     *                           </p>
+     * @return void
+     * @since 5.1.0
+     */
+    public function unserialize($serialized)
+    {
+        list($this->id, $this->username, $this->password) = unserialize($serialized);
+    }
+
+    /**
+     * @return string
+     */
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    /**
+     * @param string $plainPassword
+     */
+    public function setPlainPassword($plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
     }
 }
