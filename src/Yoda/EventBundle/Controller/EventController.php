@@ -23,7 +23,7 @@ class EventController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
+        
         $entities = $em->getRepository('YodaEventBundle:Event')->findAll();
 
         return $this->render('YodaEventBundle:Event:index.html.twig', array(
