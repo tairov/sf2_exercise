@@ -5,12 +5,17 @@ namespace Yoda\UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 /**
  * User
  *
  * @ORM\Table("yoda_user")
  * @ORM\Entity(repositoryClass="Yoda\UserBundle\Entity\UserRepository")
+ * @UniqueEntity(fields="email", message="That email already in use!")
+ * @UniqueEntity(fields="username", message="That username already in use!")
  */
 class User implements AdvancedUserInterface, \Serializable
 {
@@ -25,7 +30,8 @@ class User implements AdvancedUserInterface, \Serializable
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank(message="Put in some username.")
+     * @Assert\Length(min=3, minMessage="Give us at least 3 characters")
      * @ORM\Column(name="username", type="string", length=255)
      */
     private $username;
@@ -33,6 +39,8 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * @var string
      *
+     * @Assert\NotBlank
+     * @Assert\Email
      * @ORM\Column(name = "email", type = "string", length=255)
      */
     private $email;
@@ -53,6 +61,11 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * just for temporal plain password container
      *
+     * @Assert\NotBlank()
+     * @Assert\Regex(
+     *     pattern="/^[a-zA-Z -]*$/",
+     *     message="Provide a valid password with using latin characters"
+     * )
      * @var  string
      */
     private $plainPassword;

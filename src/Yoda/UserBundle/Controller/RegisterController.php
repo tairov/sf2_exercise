@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Yoda\UserBundle\Entity\User;
 use Yoda\UserBundle\Form\RegisterFormType;
 
@@ -37,6 +38,11 @@ class RegisterController extends Controller
             $em->persist($user);
             $em->flush();
 
+            $this->authenticateUser($user);
+
+            $request->getSession()->getFlashBag()
+                ->add('success', 'Welcome to Death star! Have a nice day!');
+
             $url = $this->generateUrl('event');
             return $this->redirect($url);
         }
@@ -50,5 +56,13 @@ class RegisterController extends Controller
             ->getEncoder($user);
 
         return $encoder->encodePassword($plainPassword, $user->getSalt());
+    }
+
+    private function authenticateUser(User $user)
+    {
+        $providerKey = 'secured_area'; // my firewall name
+        $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
+
+        $this->container->get('security.context')->setToken($token);
     }
 }

@@ -3,7 +3,8 @@ security:
         Yoda\UserBundle\Entity\User: bcrypt
 
     role_hierarchy:
-        ROLE_ADMIN:       ROLE_USER
+        ROLE_USER:        [ROLE_BLOG_CREATE, ROLE_USER_CREATE]
+        ROLE_ADMIN:       [ROLE_USER, ROLE_USER_CREATE, ROLE_ALLOWED_TO_SWITCH]
         ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     providers:
@@ -20,10 +21,18 @@ security:
                 path:     logout  # route name
                 target:   event   # "redirect to" after logout
             anonymous: ~
+            switch_user: ~
+            remember_me:
+                key:    "Order 100500"
             #http_basic:
             #    realm: "Secured Demo Area"
 
     access_control:
+      - { path: ^/login_form, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/(css|js), roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/(_wdt|_profiler), roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/, roles: ROLE_USER }
 # put access control in to the controller
 #        - { path: ^/new, roles: ROLE_ADMIN }
 #        - { path: ^/create, roles: ROLE_USER }

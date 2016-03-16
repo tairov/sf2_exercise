@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: atairov
- * Date: 3/8/16
- * Time: 11:54 PM
- */
-
 namespace Yoda\UserBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
@@ -26,7 +19,7 @@ class RegisterFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('username', 'text')
-            ->add('email', 'text', [
+            ->add('email', 'email', [
                 'label' => 'Email Address',
                 'attr' => ['class' => 'C-3PO']
             ])

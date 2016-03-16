@@ -7,7 +7,7 @@
     </h3>
 
     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-    <a href="{{ path("logout") }}" class="link">logout</a>
+    <a href="{{ path("logout") }}" class="link">logout {{ app.user.username }}</a>
     {% else %}
         <button type="button" class="btn btn-info">
             <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
