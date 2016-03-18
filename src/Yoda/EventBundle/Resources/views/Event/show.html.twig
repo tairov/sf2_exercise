@@ -3,7 +3,7 @@
 {% block body -%}
     <h1>Event</h1>
 
-    <table class="record_properties">
+    <table class="table-bordered record_properties">
         <tbody>
             <tr>
                 <th>Id</th>
@@ -12,6 +12,10 @@
             <tr>
                 <th>Name</th>
                 <td>{{ entity.name }}</td>
+            </tr>
+            <tr>
+                <th>Host</th>
+                <td>{{ entity.owner.username }}</td>
             </tr>
             <tr>
                 <th>Time</th>
@@ -34,11 +38,13 @@
             Back to the list
         </a>
     </li>
-    <li>
-        <a href="{{ path('event_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
+    {% if app.user == entity.owner %}
+        <li>
+            <a href="{{ path('event_edit', { 'id': entity.id }) }}">
+                Edit
+            </a>
+        </li>
+        <li>{{ form(delete_form) }}</li>
+    {% endif %}
 </ul>
 {% endblock %}

@@ -3,7 +3,7 @@
 namespace Yoda\UserBundle\Controller;
 
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Yoda\EventBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -63,6 +63,6 @@ class RegisterController extends Controller
         $providerKey = 'secured_area'; // my firewall name
         $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
 
-        $this->container->get('security.context')->setToken($token);
+        $this->getSecurityContext()->setToken($token);
     }
 }

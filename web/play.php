@@ -24,16 +24,12 @@ $container = $kernel->getContainer();
 $container->enterScope('request');
 $container->set('request', $request);
 
-$templating = $container->get('templating');
-
-$event = new Event();
-$event->setName('The birthday of DW');
-$event->setLocation('Deathstar');
-$event->setTime(new DateTime('tomorrow noon + 5min'));
-$event->setDetails('Ha! Darth HATES surprises!');
-
+/** @var \Doctrine\ORM\EntityManager $em */
 $em = $container->get('doctrine')->getManager();
-$em->persist($event);
-$em->flush();
 
-//echo $templating->render('YodaEventBundle:Default:index.html.twig', ['name' => 'yoda', 'count' => 5]);
+$admin = $em->getRepository('UserBundle:User')
+    ->findOneByUsernameOrEmail('darth');
+
+foreach ($admin->getEvents() as $event) {
+    var_dump($event->getName());
+}

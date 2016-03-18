@@ -14,8 +14,9 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Yoda\UserBundle\Entity\User;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
-class LoadUsers implements FixtureInterface, ContainerAwareInterface
+class LoadUsers implements FixtureInterface, ContainerAwareInterface, OrderedFixtureInterface
 {
     /**
      * @var ContainerInterface
@@ -62,4 +63,11 @@ class LoadUsers implements FixtureInterface, ContainerAwareInterface
 
         return $encoder->encodePassword($plainPassword, $user->getSalt());
     }
+
+    public function getOrder()
+    {
+        return 10;
+    }
+
+
 }

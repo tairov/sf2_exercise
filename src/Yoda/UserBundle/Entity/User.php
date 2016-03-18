@@ -2,6 +2,7 @@
 
 namespace Yoda\UserBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
@@ -71,11 +72,26 @@ class User implements AdvancedUserInterface, \Serializable
     private $plainPassword;
 
     /**
+     * @ORM\OneToMany(targetEntity="Yoda\EventBundle\Entity\Event", mappedBy="owner")
+     */
+    private $events;
+
+
+
+    /**
      * @var bool
      *
      * @ORM\Column(name = "is_active", type = "boolean")
      */
     private $isActive = true;
+
+    /**
+     * User constructor.
+     */
+    public function __construct()
+    {
+        $this->events = new ArrayCollection();
+    }
 
 
     /**
@@ -268,5 +284,21 @@ class User implements AdvancedUserInterface, \Serializable
     public function setPlainPassword($plainPassword)
     {
         $this->plainPassword = $plainPassword;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEvents()
+    {
+        return $this->events;
+    }
+
+    /**
+     * @param mixed $events
+     */
+    public function setEvents($events)
+    {
+        $this->events = $events;
     }
 }
