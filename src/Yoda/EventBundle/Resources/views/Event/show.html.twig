@@ -29,6 +29,38 @@
                 <th>Details</th>
                 <td>{{ entity.details }}</td>
             </tr>
+            <tr>
+                <th>Who</th>
+                <td>
+                    {{ entity.attendees|length }} attending!
+                    {% for attendee in entity.attendees %}
+                        <div>
+                            {{ attendee }}
+                        </div>
+                    {% else %}
+                        <strong>nobody yet</strong>
+                    {% endfor %}
+
+                    {% if entity.hasAttendee(app.user) %}
+                        <div>
+                            <label class="label label-info">
+                                you are already in
+                            </label>
+                            <a href="{{ path('event_unattend', {slug: entity.slug}) }}"
+                               class="btn btn-warning bnt-xs js-attend-toggle">
+                                i cant go anymore
+                            </a>
+                        </div>
+                    {% else %}
+                        <div>
+                            <a href="{{ path('event_attend', {slug: entity.slug}) }}"
+                               class="btn btn-success bnt-xs js-attend-toggle">
+                                I totally want to go!
+                            </a>
+                        </div>
+                    {% endif %}
+                </td>
+            </tr>
         </tbody>
     </table>
 
@@ -40,11 +72,38 @@
     </li>
     {% if app.user == entity.owner %}
         <li>
-            <a href="{{ path('event_edit', { 'id': entity.id }) }}">
+            <a href="{{ path('event_edit', { 'slug': entity.slug }) }}">
                 Edit
             </a>
         </li>
         <li>{{ form(delete_form) }}</li>
     {% endif %}
 </ul>
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function() {
+            $('.js-attend-toggle').on('click', function(e) {
+                e.preventDefault();
+
+                var $anchor = $(this);
+                var url = $(this).attr('href')+'.json';
+
+                $.post(url, null, function(data) {
+                    if (data.attending) {
+                        var message = 'See you there!';
+                    } else {
+                        var message = 'We\'ll miss you!';
+                    }
+
+                    $anchor.after('<span class="label label-default">&#10004; '+message+'</span>');
+                    $anchor.hide();
+                });
+                return false;
+            });
+        });
+    </script>
 {% endblock %}

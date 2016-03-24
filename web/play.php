@@ -29,7 +29,6 @@ $em = $container->get('doctrine')->getManager();
 
 $admin = $em->getRepository('UserBundle:User')
     ->findOneByUsernameOrEmail('darth');
-
-foreach ($admin->getEvents() as $event) {
-    var_dump($event->getName());
-}
+$admin->setPlainPassword('new110220');
+$em->persist($admin);
+$em->flush();

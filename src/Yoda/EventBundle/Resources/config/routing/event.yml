@@ -3,7 +3,7 @@ event:
     defaults: { _controller: "YodaEventBundle:Event:index" }
 
 event_show:
-    path:     /{id}/show
+    path:     /{slug}/show
     defaults: { _controller: "YodaEventBundle:Event:show" }
 
 event_new:
@@ -16,15 +16,27 @@ event_create:
     methods:  POST
 
 event_edit:
-    path:     /{id}/edit
+    path:     /{slug}/edit
     defaults: { _controller: "YodaEventBundle:Event:edit" }
 
 event_update:
-    path:     /{id}/update
+    path:     /{slug}/update
     defaults: { _controller: "YodaEventBundle:Event:update" }
     methods:  [POST, PUT]
 
 event_delete:
-    path:     /{id}/delete
+    path:     /{slug}/delete
     defaults: { _controller: "YodaEventBundle:Event:delete" }
     methods:  [POST, DELETE]
+
+event_attend:
+    path:     /{slug}/attend.{format}
+    defaults: { _controller: "YodaEventBundle:Event:attend", format: html }
+    requirements:
+      format: json
+
+event_unattend:
+    path:     /{slug}/unattend.{format}
+    defaults: { _controller: "YodaEventBundle:Event:unattend", format: html }
+    requirements:
+      format: json

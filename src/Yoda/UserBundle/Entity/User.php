@@ -284,6 +284,10 @@ class User implements AdvancedUserInterface, \Serializable
     public function setPlainPassword($plainPassword)
     {
         $this->plainPassword = $plainPassword;
+
+        // nullify normal password so that the doctrine saves our new one
+        // our listener UserListener will save only if the object is modified
+        $this->setPassword(null);
     }
 
     /**
@@ -300,5 +304,10 @@ class User implements AdvancedUserInterface, \Serializable
     public function setEvents($events)
     {
         $this->events = $events;
+    }
+
+    public function __toString()
+    {
+        return (string) $this->getUsername();
     }
 }

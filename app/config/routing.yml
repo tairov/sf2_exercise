@@ -6,3 +6,8 @@ user_controller:
     resource: "@UserBundle/Controller"
     prefix:   /
     type:     annotation
+
+yoda_controller:
+    resource: "@YodaEventBundle/Controller"
+    prefix:   /
+    type:     annotation

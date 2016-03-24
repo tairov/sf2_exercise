@@ -1,0 +1,21 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <section class="login">
+        <article>
+            <h1>Ah crap!</h1>
+            <h2>404</h2>
+            <div>These are not the droids you're looking for...</div>
+        </article>
+    </section>
+
+    <section class="events">
+        {{ render(controller('YodaEventBundle:Event:_upcomingEvents', {
+            max: 1
+        })) }}
+    </section>
+{% endblock %}

@@ -2,8 +2,10 @@
 
 namespace Yoda\EventBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Yoda\UserBundle\Entity\User;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 
 /**
@@ -11,6 +13,7 @@ use Yoda\UserBundle\Entity\User;
  *
  * @ORM\Table(name="yoda_event")
  * @ORM\Entity(repositoryClass="Yoda\EventBundle\Entity\EventRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Event
 {
@@ -57,6 +60,45 @@ class Event
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $owner;
+
+    /**
+     * @Gedmo\Slug(fields={"name"}, updatable=false)
+     * @ORM\Column(name = "slug", unique=true)
+     */
+    private $slug;
+
+
+    /**
+     * @var \DateTime $created
+     *
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime $updated
+     *
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
+     */
+    private $updatedAt;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Yoda\UserBundle\Entity\User")
+     * @ORM\JoinTable(
+     *     joinColumns={@ORM\JoinColumn(onDelete="CASCADE")},
+     *     inverseJoinColumns={@ORM\JoinColumn(onDelete="CASCADE")}
+     * )
+     */
+    private $attendees;
+
+    /**
+     * Event constructor.
+     */
+    public function __construct()
+    {
+        $this->attendees = new ArrayCollection();
+    }
 
 
     /**
@@ -179,6 +221,64 @@ class Event
     public function setOwner(User $owner)
     {
         $this->owner = $owner;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param mixed $slug
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getAttendees()
+    {
+        return $this->attendees;
+    }
+
+    public function hasAttendee(User $user)
+    {
+        return $this->getAttendees()->contains($user);
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        // lifecycle callback are easy to setup, thats why they are brilliant
+        // but they have one big limitation - thay have no access to container
+        // inside of entities
+        if (!$this->getCreatedAt()) {
+            $this->createdAt = new \DateTime();
+        }
     }
 }
 
