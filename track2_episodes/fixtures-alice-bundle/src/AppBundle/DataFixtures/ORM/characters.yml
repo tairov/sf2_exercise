@@ -1,0 +1,16 @@
+AppBundle\Entity\Character:
+    character1:
+        name: Yoshi
+        realName: T. Yoshisaur Munchakoopas
+        highScore: 999999
+        email: yoshi@nintendo.com
+        tagLine: Yoshi!
+        universe: '@universe_nintendo'
+    character{2..10}:
+        name: <characterName()>
+        realName: <name()>
+        highScore: <numberBetween(1, 999999)>
+        email: <email()>
+        tagLine: 80%? <sentence()>
+        universe: '@universe_*'
+        avatarFilename: <avatar()>
