@@ -30,7 +30,7 @@ class LoadEvents implements FixtureInterface, OrderedFixtureInterface
         $event->setName('test event' . uniqid());
         $event->setLocation('Location test event' . uniqid());
         $event->setDetails('test event details ' . uniqid());
-        $event->setTime(new DateTime());
+        $event->setTime(new DateTime("+10 days"));
         $manager->persist($event);
 
         $event2 = new Event();
@@ -45,7 +45,7 @@ class LoadEvents implements FixtureInterface, OrderedFixtureInterface
         $event3->setLocation('Location test event' . uniqid());
         $event3->setDetails('test event details ' . uniqid());
         $event3->setTime(new DateTime('+22 days'));
-        $manager->persist($event2);
+        $manager->persist($event3);
 
         $event->setOwner($user);
         $event2->setOwner($user);

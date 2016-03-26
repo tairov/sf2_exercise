@@ -1,43 +1,20 @@
-{% extends '::base.html.twig' %}
+{% extends 'YodaEventBundle::layout.html.twig' %}
 
-{% block body -%}
-    <h1>Event list</h1>
-    <h3>
-    <a href="{{ path("event_new") }}" class="link">create new event</a>
-    </h3>
+{% block body %}
 
-    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-    <a href="{{ path("logout") }}" class="link">logout {{ app.user.username }}</a>
-    {% else %}
-        <button type="button" class="btn btn-info">
-            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-            <a href="{{ path("user_login") }}" class="link">Login</a>
-        </button>
-    {% endif %}
-    <table class="table-bordered  records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Time</th>
-                <th>Location</th>
-                <th>Details</th>
-                <th>Who?</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
+    <section class="events">
+        <header id="menu">
+            <a class="button" href="{{ path('event_new') }}">Create new event</a>
+
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                <a class="link" href="{{ path('logout') }}">
+                    Logout {{ app.user.username }}
+                </a>
+            {% else %}
+                <a class="link" href="{{ path('login_form') }}">Login</a>
+            {% endif %}
+        </header>
 
         {{ render(controller('YodaEventBundle:Event:_upcomingEvents')) }}
-
-        </tbody>
-    </table>
-
-        <ul>
-        <li>
-            <a href="{{ path('event_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
-    {% endblock %}
+    </section>
+{% endblock %}
