@@ -1,0 +1,11 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/book/service_container.html
+parameters:
+#    parameter_name: value
+
+services:
+    user_agent_subscriber:
+        class: AppBundle\EventListener\UserAgentSubscriber
+        arguments: ["@logger"]
+        tags:
+            - { name: kernel.event_subscriber }

@@ -1,0 +1,18 @@
+services:
+    logger:
+        class: Monolog\Logger
+        arguments:
+            - main
+            - ['@logger.stream_handler']
+        calls:
+            - [pushHandler, ['@logger.std_out_logger']]
+            - [debug, ['The logger started']]
+
+    logger.stream_handler:
+        class: Monolog\Handler\StreamHandler
+        arguments: ['/tmp/dino.log']
+
+    logger.std_out_logger:
+        class: Monolog\Handler\StreamHandler
+        arguments:
+            - 'php://stdout'
